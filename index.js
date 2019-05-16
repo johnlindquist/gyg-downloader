@@ -25,7 +25,7 @@ nightmare
     )
       .map(e => e.innerText)
       .filter(text => text)
-      .map(link => `${link}_1080p.mp4`)
+      .map(link => `${link.replace("www", "media")}_1080p.mp4`)
   )
   .end()
   .then(async results => {
