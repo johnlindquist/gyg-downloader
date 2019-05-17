@@ -11,6 +11,8 @@ const loginSelector = `#app-mount > div.app-19_DXt.platform-web > div > div.left
 const passwordSelector = `#app-mount > div.app-19_DXt.platform-web > div > div.leftSplit-1qOwnR.hasLogo-2bq2VW > div > form > div > div.block-egJnc0.marginTop20-3TxNs6 > div:nth-child(2) > div > input`
 const buttonSelector = `#app-mount > div.app-19_DXt.platform-web > div > div.leftSplit-1qOwnR.hasLogo-2bq2VW > div > form > div > div.block-egJnc0.marginTop20-3TxNs6 > button.marginBottom8-AtZOdT.button-3k0cO7.button-38aScr.lookFilled-1Gx00P.colorBrand-3pXr91.sizeLarge-1vSeWK.fullWidth-1orjjo.grow-q77ONN`
 
+const existingVideos = fs.readdirSync("./video")
+
 nightmare
   .goto("https://discordapp.com/channels/@me/539924277881995292")
   .type(loginSelector, process.env.EMAIL)
@@ -29,7 +31,12 @@ nightmare
   )
   .end()
   .then(async results => {
-    for (let videoUrl of results) {
+    const filteredResults = results.filter(
+      videoUrl =>
+        !existingVideos.some(existingVideo => videoUrl.includes(existingVideo))
+    )
+
+    for (let videoUrl of filteredResults) {
       await download(videoUrl, "video")
     }
   })
